@@ -42,7 +42,7 @@ def find_book_title_and_author(url):
 def get_books_description(books_from_page):
     for book in books_from_page:
         book_page_href = book.select_one('a')['href']
-        book_page_url = urljoin('http://tululu.org', book_page_href.strip('/') + '/')
+        book_page_url = urljoin('http://tululu.org/index.html', book_page_href.strip('/') + '/')
 
         book_title, book_author = find_book_title_and_author(book_page_url)
         comments = [comment.text for comment in soup.select('.texts span')]
@@ -57,7 +57,7 @@ def get_books_description(books_from_page):
 
         book_image_src = book.select_one('img')['src']
         book_image_title = book_image_src.split('/')[2]
-        book_image_url = urljoin('http://tululu.org', book_image_src.strip('/'))
+        book_image_url = urljoin('http://tululu.org/index.html', book_image_src.strip('/'))
         img_src = download_image(book_image_url, book_image_title)
 
         book_description = {
