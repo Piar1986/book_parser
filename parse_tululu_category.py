@@ -10,20 +10,20 @@ from urllib.parse import urljoin
 def download_txt(url, filename, folder='books'):
     response = requests.get(url, allow_redirects = False)
     response.raise_for_status()
-    if response.status_code==200:
-        filepath = os.path.join(folder, sanitize_filename(filename + '.txt'))
-        with open(filepath, 'w', encoding='utf8') as file:
-            file.write(response.text)
-        return filepath
+    #if response.status_code==200:
+    filepath = os.path.join(folder, sanitize_filename(filename + '.txt'))
+    with open(filepath, 'w', encoding='utf8') as file:
+        file.write(response.text)
+    return filepath
 
 def download_image(url, filename, folder='images'):
     response = requests.get(url, allow_redirects = False)
     response.raise_for_status()
-    if response.status_code==200:
-        filepath = os.path.join(folder, filename)
-        with open(filepath, 'wb') as file:
-            file.write(response.content)
-        return filepath
+    #if response.status_code==200:
+    filepath = os.path.join(folder, filename)
+    with open(filepath, 'wb') as file:
+        file.write(response.content)
+    return filepath
 
 if __name__ == '__main__':
 
