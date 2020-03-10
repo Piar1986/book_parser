@@ -39,7 +39,7 @@ if __name__ == '__main__':
         Path('books').mkdir(parents=True, exist_ok=True)
         Path('images').mkdir(parents=True, exist_ok=True)
 
-        books_data = []
+        books_description = []
         for page in range(args.start_page, args.end_page):
             page_url = urljoin(page_url_template, str(page))
             response = requests.get(page_url)
@@ -76,7 +76,7 @@ if __name__ == '__main__':
                 book_image_url = urljoin('http://tululu.org', book_image_src.strip('/'))
                 img_src = download_image(book_image_url, book_image_title)
 
-                book_data = {
+                book_description = {
                     'title': book_title,
                     'author': book_author,
                     'img_src': img_src,
@@ -84,12 +84,12 @@ if __name__ == '__main__':
                     'comments': comments,
                     'genres': genres
                 }
-                books_data.append(book_data)
+                books_description.append(book_description)
 
                 print(book_page_url)
 
-        with open('books_data.json', 'w', encoding='utf8') as my_file:
-            json.dump(books_data, my_file, ensure_ascii = False, indent=4)
+        with open('books_description.json', 'w', encoding='utf8') as my_file:
+            json.dump(books_description, my_file, ensure_ascii = False, indent=4)
 
     if not args.start_page:
     	print('Введите начальную страницу')
