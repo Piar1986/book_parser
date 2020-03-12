@@ -29,24 +29,37 @@ def download_image(url, filename, folder='images'):
         file.write(response.content)
     return filepath
 
-def find_book_title_and_author(url):
-    response = requests.get(url, allow_redirects = False)
-    response.raise_for_status()
-    soup = BeautifulSoup(response.text, 'lxml')
+def find_book_title(soup):
     book_title_text = soup.select_one('h1').text
     book_information = book_title_text.split('::')
     book_title = book_information[0].strip()
+    return book_title
+
+def find_book_author(soup):
+    book_title_text = soup.select_one('h1').text
+    book_information = book_title_text.split('::')
     book_author = book_information[1].strip()
-    return book_title, book_author
+    return book_author
+
+def find_book_comments(soup):
+    return [comment.text for comment in soup.select('.texts span')]
+
+def find_book_genres(soup):
+    return [genre.text for genre in soup.select('span.d_book a')]    
 
 def get_books_description(books_from_page):
     for book in books_from_page:
         book_page_href = book.select_one('a')['href']
         book_page_url = urljoin('http://tululu.org/index.html', book_page_href.strip('/') + '/')
 
-        book_title, book_author = find_book_title_and_author(book_page_url)
-        comments = [comment.text for comment in soup.select('.texts span')]
-        genres = [genre.text for genre in soup.select('span.d_book a')]
+        response = requests.get(book_page_url, allow_redirects = False)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, 'lxml')
+
+        book_title = find_book_title(soup)
+        book_author = find_book_author(soup)
+        comments = find_book_comments(soup)
+        genres = find_book_genres(soup)
 
         book_id = book_page_href.strip('/b')
         book_download_url = book_download_url_template.format(book_id)
