@@ -65,10 +65,10 @@ def get_book_description(url):
 
     if book_path is None:
         return None
-
+    
     book_image_src = book.select_one('img')['src']
     book_image_title = book_image_src.split('/')[2]
-    book_image_url = urljoin('http://tululu.org/', book_image_src.strip('/'))
+    book_image_url = urljoin(url, book_image_src)
     img_src = download_image(book_image_url, book_image_title)
 
     book_description = {
@@ -104,7 +104,7 @@ if __name__ == '__main__':
 
         for book in books_from_page:
             book_page_href = book.select_one('a')['href']
-            book_page_url = urljoin('http://tululu.org/', book_page_href.strip('/') + '/')
+            book_page_url = urljoin(page_url, book_page_href)
             book_description = get_book_description(book_page_url)
             if book_description is None:
                 continue
